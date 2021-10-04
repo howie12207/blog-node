@@ -10,11 +10,11 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const userRoute = require("./user");
-const aboutRoute = require("./about");
-const articleRoute = require("./article");
-const sortRoute = require("./sort");
-const worksRoute = require("./works");
+const userRoute = require("./utils/user");
+const aboutRoute = require("./utils/about");
+const articleRoute = require("./utils/article");
+const sortRoute = require("./utils/sort");
+const worksRoute = require("./utils/works");
 
 app.use("/", userRoute);
 app.use("/about", aboutRoute);
