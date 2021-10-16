@@ -258,6 +258,15 @@ router.delete("/user/admin/:id", async (req, res) => {
   }
 });
 
+// 查看連線是否OK
+router.get("/connect", async (req, res) => {
+  try {
+    return res.send({ code: 200, data: "ok" });
+  } catch (err) {
+    res.send({ code: 500, message: msg["500"] });
+  }
+});
+
 /***
  *  read 1  create 2  update 4  delete 8
  *
