@@ -9,15 +9,15 @@ const SORT = "sorts";
 // 創建分類
 router.post("/", async (req, res) => {
   try {
-    if (auth(req) !== "admin")
-      return res.send({ code: 401, message: msg["401"] });
-    const { name, createTime } = req.body;
-    if (!name || !createTime) {
+    // if (auth(req) !== "admin")
+    //   return res.send({ code: 401, message: msg["401"] });
+    const { name, createTime, color } = req.body;
+    if (!name || !createTime || !color) {
       res.send({ code: 400, message: msg["400"] });
       return;
     }
     const result = await DB.insert(SORT, req.body);
-    res.send(result);
+    res.send({ code: 200, data: result });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
@@ -34,17 +34,34 @@ router.get("/", async (req, res) => {
     res.send({ code: 500, message: msg["500"] });
   }
 });
+// 更新分類
+router.put("/:id", async (req, res) => {
+  try {
+    // if (auth(req) !== "admin")
+    //   return res.send({ code: 401, message: msg["401"] });
+    const { name, createTime, color } = req.body;
+    if (!name || !createTime || !color) {
+      res.send({ code: 400, message: msg["400"] });
+      return;
+    }
+    const params = { name, createTime, color };
+    await DB.update(SORT, { _id: ObjectId(req.body._id) }, params);
+    res.send({ code: 200, data: true });
+  } catch (err) {
+    res.send({ code: 500, message: msg["500"] });
+  }
+});
 // 刪除指定分類
 router.delete("/:id", async (req, res) => {
   try {
-    if (auth(req) !== "admin")
-      return res.send({ code: 401, message: msg["401"] });
+    // if (auth(req) !== "admin")
+    //   return res.send({ code: 401, message: msg["401"] });
     if (!req.params.id) {
       res.send({ code: 400, message: msg["400"] });
       return;
     }
     const result = await DB.remove(SORT, { _id: ObjectId(req.params.id) });
-    res.send(result);
+    res.send({ code: 200, data: result });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
