@@ -155,7 +155,6 @@ router.put("/:id", async (req, res) => {
       !img ||
       !pathCode ||
       !pathDemo ||
-      !url ||
       status === undefined ||
       recommend === undefined ||
       !content ||
