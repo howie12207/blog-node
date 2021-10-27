@@ -7,28 +7,27 @@ const auth = require("./auth.js");
 const COMMENT = "comments";
 
 // 創建留言
-router.post("/comment", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    if (!auth(req)) return res.send({ code: 401, message: msg["401"] });
-    const { createTime, account, content, articleId } = req.body;
-    if (!createTime || !account || !content || !articleId) {
+    const { account, content, articleId } = req.body;
+    if (!account || !content || !articleId) {
       res.send({ code: 400, message: msg["400"] });
       return;
     }
     const params = {
-      createTime,
+      createTime: new Date(),
       account,
       content,
       articleId: ObjectId(articleId),
     };
     const result = await DB.insert(COMMENT, params);
-    res.send(result);
+    res.send({ code: 200, data: true });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
 });
-// 取得所有留言 (不須權限)
-router.get("/comment", async (req, res) => {
+// 取得所有留言 (須權限)
+router.get("/", async (req, res) => {
   try {
     const {
       where = {},
@@ -46,13 +45,13 @@ router.get("/comment", async (req, res) => {
       DB.findTable(COMMENT, params),
       DB.findCount(COMMENT, params),
     ]);
-    res.send({ content, totalElements });
+    res.send({ code: 200, data: { content, totalElements } });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
 });
 // 取得某篇文章留言 (不須權限)
-router.get("/comment/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const {
       articleId,
@@ -70,13 +69,13 @@ router.get("/comment/:id", async (req, res) => {
       DB.findTable(COMMENT, params),
       DB.findCount(COMMENT, params),
     ]);
-    res.send({ content, totalElements });
+    res.send({ code: 200, data: { content, totalElements } });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
 });
 // 刪除指定留言
-router.delete("/comment/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     if (auth(req) !== "admin")
       return res.send({ code: 401, message: msg["401"] });
@@ -85,8 +84,10 @@ router.delete("/comment/:id", async (req, res) => {
       return;
     }
     const result = await DB.remove(COMMENT, { _id: ObjectId(req.params.id) });
-    res.send(result);
+    res.send({ code: 200, data: true });
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
 });
+
+module.exports = router;

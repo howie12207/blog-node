@@ -15,12 +15,14 @@ const aboutRoute = require("./utils/about");
 const articleRoute = require("./utils/article");
 const sortRoute = require("./utils/sort");
 const worksRoute = require("./utils/works");
+const commentRoute = require("./utils/comment");
 
 app.use("/", userRoute);
 app.use("/about", aboutRoute);
 app.use("/article", articleRoute);
 app.use("/sort", sortRoute);
 app.use("/works", worksRoute);
+app.use("/comment", commentRoute);
 
 app.listen(port, function () {
   console.log(`CORS-enabled web server listening on port ${port}`);

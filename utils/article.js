@@ -81,7 +81,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const result = await DB.findOne(ARTICLE, { _id: ObjectId(req.params.id) });
+
+    // setTimeout(() => {
     res.send({ code: 200, data: result });
+    // }, 3000);
   } catch (err) {
     res.send({ code: 500, message: msg["500"] });
   }
